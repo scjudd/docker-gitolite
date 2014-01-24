@@ -22,15 +22,26 @@ RUN \
     update-alternatives --set editor /usr/bin/vim.basic ;\
 # END RUN
 
-# Fix permissions, finish configuration.
+# Finish configuration.
 RUN \
-    chown -R git:git /home/git/.gitolite/ ;\
     mkdir -p /var/run/sshd ;\
     export LANGUAGE=en_US.UTF-8 ;\
     export LANG=en_US.UTF-8 ;\
     export LC_ALL=en_US.UTF-8 ;\
     locale-gen en_US.UTF-8 ;\
     dpkg-reconfigure locales ;\
+# END RUN
+
+# Install curl (for the post-receive hook).
+RUN apt-get install -y curl
+
+# Add the post-receive hook.
+ADD post-receive /home/git/.gitolite/hooks/common/
+
+# Fix permissions.
+RUN \
+    chmod +x /home/git/.gitolite/hooks/common/post-receive ;\
+    chown -R git:git /home/git/.gitolite/ ;\
 # END RUN
 
 VOLUME /home/git

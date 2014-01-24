@@ -1,0 +1,11 @@
+#!/bin/bash
+
+read OLDREV NEWREV REF
+BRANCH=$(git rev-parse --symbolic --abbrev-ref $REF)
+REPO=$(basename $PWD)
+REPO=${REPO%.git}
+
+echo "repo:   $REPO"
+echo "branch: $BRANCH"
+echo "oldrev: $OLDREV"
+echo "newrev: $NEWREV"
